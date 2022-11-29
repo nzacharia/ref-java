@@ -1,0 +1,14 @@
+name: Push
+on:
+  push:
+    branches:
+      - main
+jobs:
+  DeployReferenceApp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Reference App
+        uses: nzacharia/reference-pipeline@v1
+      - name: Unit Test
+        run: SERVICE_ENDPOINT="http://localhost:8080/service" ./gradlew functional:test
+        
