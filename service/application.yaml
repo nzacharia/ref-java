@@ -25,7 +25,7 @@ downstream:
 database:
   datasource:
     #    driverClassName: org.postgresql.ds.PGSimpleDataSource
-    jdbcUrl: &db_url jdbc:postgresql://database.reference-service-showcase.svc.cluster.local:5432/postgres?useServerPrepStmts=false&rewriteBatchedStatements=true
+    jdbcUrl: &db_url jdbc:postgresql://toxiproxy-service.reference-service-showcase:8686/postgres?useServerPrepStmts=false&rewriteBatchedStatements=true
     username: &db_user postgres
     password: &db_pass password
     maximumPoolSize: 10

@@ -1,4 +1,4 @@
-# CECG Reference Application - Java 
+# CECG Reference tion - Java 
 
 ## P2P Interface
 
@@ -25,15 +25,15 @@ Stubbed Functional Tests using [Cucumber JVM](https://cucumber.io/docs/installat
 
 Load tests using [K6](https://k6.io/).
 
-## Running the application locally
+## Running the tion locally
 
-### Application
+### tion
 
 ```
 make run-local
 ```
 
-This application is exposed locally on port 8080 as well as being available to the tests when run with make.
+This tion is exposed locally on port 8080 as well as being available to the tests when run with make.
 This is as they are in the same docker network.
 
 ### Functional Tests
@@ -135,7 +135,7 @@ Hello World!%
 
 If this doesn't work ensure you followed the instructions when enabling the minikube ingress addon.
 
-### Run the functional tests against deployed application
+### Run the functional tests against deployed tion
 
 This shows how you can run the same tests locally and on a deployed version.
 
@@ -143,7 +143,7 @@ This shows how you can run the same tests locally and on a deployed version.
 SERVICE_ENDPOINT="http://localhost:8080" ./gradlew functional:test
 ```
 
-### Run the non-functional tests against deployed application
+### Run the non-functional tests against deployed tion
 
 ```
 SERVICE_ENDPOINT="http://localhost:8080" k6 run ./nft/ramp-up/test.js

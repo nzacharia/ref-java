@@ -10,7 +10,25 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8080
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: toxiproxy-service
+  namespace: reference-service-showcase
+spec:
+  selector:
+    app.kubernetes.io/name: toxiproxy-service
+  type: NodePort
+  ports:
+    - name: toxiport
+      protocol: TCP
+      port: 8474
+      targetPort: 8474
+    - name: dbport
+      protocol: TCP
+      port: 8686
+      targetPort: 8686
 ---
 apiVersion: v1
 kind: Service
@@ -33,9 +51,7 @@ metadata:
   namespace: reference-service-showcase
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/ssl-redirect: \"false\"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: \"false\"
-
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -50,10 +66,10 @@ spec:
                   number: 80
     - http:
         paths:
-          - path: /service(/|$)(.*)
+          - path: /toxiproxy(/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: reference-service
+                name: toxiproxy-service
                 port:
-                  number: 443
+                  number: 8474
