@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toxiproxy
+  namespace: reference-service-showcase
+  labels:
+    app.kubernetes.io/name: toxiproxy-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: toxiproxy-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: toxiproxy-service
+    spec:
+      containers:
+        - name: toxiproxy
+          image: ghcr.io/shopify/toxiproxy
+          ports:
+            - containerPort: 8474
+              name: toxiproxy-api
+            - containerPort: 8686
+              name: db-proxy              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: toxiproxy-service
+  namespace: reference-service-showcase
+spec:
+  selector:
+    app.kubernetes.io/name: toxiproxy-service
+  type: NodePort
+  ports:
+    - name: toxiport
+      protocol: TCP
+      port: 8474
+      targetPort: 8474
+    - name: dbport
+      protocol: TCP
+      port: 8686
+      targetPort: 8686

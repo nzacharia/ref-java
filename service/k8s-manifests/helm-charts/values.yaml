@@ -1,0 +1,26 @@
+referenceport:
+    name: service
+    containerport: 8080
+    serviceport: 80
+track: stable
+resources:
+  requests:
+    memory: 300Mi
+    cpu: 0.1 
+  limits:
+    memory: 750Mi
+    cpu: 1.5
+replicas: 3
+image:
+  registry: nzacharia
+  repository: ref-service
+  tag: v1
+canary:
+  replicas: 3
+  track: canary
+  weight: 0
+  image:
+    tag: v2
+  metricsport:
+    name: metrics
+    containerport: 8001

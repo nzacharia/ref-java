@@ -29,6 +29,8 @@ dependencies {
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.0'
 	implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.23'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.7.5'
+	 implementation group: 'io.prometheus', name: 'simpleclient', version: '0.16.0'
+     implementation group: 'io.prometheus', name: 'simpleclient_httpserver', version: '0.16.0'
 
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'

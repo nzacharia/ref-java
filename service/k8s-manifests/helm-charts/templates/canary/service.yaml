@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+   prometheus.io/scrape: "true"
+  name: canary-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels: &labels
+    app: canary-{{ .Release.Name }}
+    track: {{ .Values.canary.track }}
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: {{ .Values.referenceport.serviceport }}
+    targetPort: {{ .Values.referenceport.containerport }}
+  - name: metrics
+    protocol: TCP
+    port: 8085
+    targetPort: 8001
+  selector: *labels
