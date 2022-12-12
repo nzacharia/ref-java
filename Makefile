@@ -2,7 +2,8 @@ projectDir := $(realpath $(dir $(firstword $(MAKEFILE_LIST))))
 os := $(shell uname)
 VERSION ?= $(shell git rev-parse --short HEAD)
 registry = nzacharia/ref-service
-
+stabletag= v1
+canarytag= v2
 # P2P tasks
 
 .PHONY: local
@@ -58,17 +59,25 @@ enable-ingress:
 	minikube addons enable ingress
 	minikube tunnel &
 
+
+.PHONY: enable-proxy
+enable-proxy:
+	toxiproxy-cli -h localhost:8474/toxiproxy create -l 0.0.0.0:8686 -u database.reference-service-showcase:5432 db-proxy
+
+
 .PHONY: deploy-manifests
 deploy-manifests:
 	kubectl apply -f service/k8s-manifests/namespace.yml
 	kubectl apply -f service/k8s-manifests/deployment.yml
 	kubectl apply -f service/k8s-manifests/postgres-config.yml
 	kubectl apply -f service/k8s-manifests/postgres-deployment.yml
+	kubectl apply -f service/k8s-manifests/toxiproxy.yml
 	kubectl apply -f service/k8s-manifests/postgres-pvc-pv.yml
 	kubectl apply -f service/k8s-manifests/deployment.yml
 	kubectl apply -f service/k8s-manifests/postgres-service.yml	
 	kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 	kubectl apply -f service/k8s-manifests/expose.yml
+	sleep 10
 
 
 .PHONY: check-resources
@@ -87,8 +96,10 @@ docker-build:
 docker-push:
 	docker push $(registry)
 
-.PHONY: docker-build-minikube
-docker-build-minikube:
-	docker build --file Dockerfile.service --tag $(registry) .
-	echo -n "verifying images:"
-	docker images
+.PHONY: docker-build-minikube-stable
+docker-build-minikube-stable:
+	docker build --file Dockerfile.service --tag $(registry):$(stabletag) .
+
+.PHONY: docker-build-minikube-canary
+docker-build-minikube-canary:
+	docker build --file Dockerfile.service --tag $(registry):$(canarytag) .

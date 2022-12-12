@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+    track: {{ .Values.track }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    -  http:
+        paths:
+          - path: /service(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}
+                port:
+                  name: http
+    - http:
+        paths:
+          - path: /toxiproxy(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: toxiproxy-service
+                port:
+                  number: 8474
